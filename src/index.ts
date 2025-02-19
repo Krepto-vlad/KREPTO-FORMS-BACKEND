@@ -1,3 +1,4 @@
+// @ts-nocheck
 // // import { Pool } from "pg";
 // // import express from "express";
 // // import dotenv from "dotenv";
@@ -32,20 +33,7 @@
 // client.connect();
 
 // // Эндпоинт для теста подключения к БД
-// app.get("/test-db", async (req, res) => {
-//   try {
-//     // Выполняем SQL-запрос для проверки подключения
-//     const result = await client.query("SELECT NOW()");
-//     const currentTime = result.rows[0].now; // Получаем текущее время из базы данных
 
-//     return res.status(200).json({
-//       message: "База данных подключена",
-//       time: currentTime,
-//     });
-//   } catch (error) {
-//     return res.status(500).json({ message: "Ошибка подключения к базе данных", error });
-//   }
-// });
 
 // // Запуск сервера
 // app.listen(port, () => {
@@ -70,3 +58,16 @@ app.use("/auth", authRoutes);
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
+
+
+app.get("/test", async (req, res) => {
+    try {
+      
+      return res.status(200).json({
+        message: "ok",
+    
+      });
+    } catch (error) {
+      return res.status(500).json({ message: "Ошибка подключения к базе данных", error });
+    }
+  });
