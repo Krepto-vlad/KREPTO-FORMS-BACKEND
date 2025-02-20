@@ -51,8 +51,11 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 app.use(
-      cors({
-        origin: process.env.CLIENT_URL || "http://localhost:5173",
+    cors({
+        origin: [
+          "https://krepto-forms-webapp.vercel.app", 
+          "https://krepto-forms-webapp-4tseavlwg-krepto-vlads-projects.vercel.app"
+        ],
         credentials: true,
       })
 );
