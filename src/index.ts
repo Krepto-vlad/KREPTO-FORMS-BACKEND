@@ -68,6 +68,18 @@ app.use("/auth", authRoutes);
 
 const createTables = async () => {
   try {
+
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS users (
+        id SERIAL PRIMARY KEY,
+        name TEXT NOT NULL,
+        surname TEXT NOT NULL,
+        email TEXT UNIQUE NOT NULL,
+        password TEXT NOT NULL,
+        last_login TIMESTAMP
+      );
+    `);
+
     await pool.query(`
       CREATE TABLE IF NOT EXISTS forms (
         id SERIAL PRIMARY KEY,
@@ -78,7 +90,7 @@ const createTables = async () => {
         created_at TIMESTAMP DEFAULT NOW()
       );
     `);
-    console.log("✅ Таблица forms проверена/создана!");
+    console.log("✅ Таблица users и forms проверена/создана!");
   } catch (err) {
     console.error("❌ Ошибка при создании таблицы:", err);
   }
