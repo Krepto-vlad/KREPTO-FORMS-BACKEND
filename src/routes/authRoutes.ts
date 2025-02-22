@@ -8,6 +8,11 @@ import { body, validationResult } from "express-validator";
 const router = express.Router();
 const SECRET = process.env.JWT_SECRET || "test-secret";
 
+router.get("/health", async (req, res) => {
+  res.status(200)
+  .json({ message: "Healthy"  });
+});
+
 router.post(
   "/register",
   [
