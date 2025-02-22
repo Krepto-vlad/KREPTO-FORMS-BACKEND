@@ -73,7 +73,8 @@ const createTables = async () => {
         id SERIAL PRIMARY KEY,
         title TEXT NOT NULL,
         description TEXT,
-        fields JSONB NOT NULL,
+        theme VARCHAR,
+        questions JSONB NOT NULL,
         created_at TIMESTAMP DEFAULT NOW()
       );
     `);
