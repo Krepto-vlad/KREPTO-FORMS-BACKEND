@@ -109,6 +109,16 @@ app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
 
+app.get("/forms", async (req, res) => {
+  try {
+    const result = await pool.query("SELECT * FROM forms;");
+    res.json(result.rows);
+  } catch (error) {
+    console.error("❌ Ошибка при получении форм:", error);
+    res.status(500).json({ message: "Ошибка сервера" });
+  }
+});
+
 
 app.get("/test-db", async (req, res) => {
   try {
