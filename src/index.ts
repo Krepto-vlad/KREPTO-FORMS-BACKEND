@@ -56,7 +56,7 @@ app.use(
     cors({
         origin: [
           "https://krepto-forms-webapp.vercel.app", 
-          "https://krepto-forms-webapp-5sir5srp7-krepto-vlads-projects.vercel.app"
+          "https://krepto-forms-webapp-nnz7tk7uy-krepto-vlads-projects.vercel.app"
         ],
         credentials: true,
       })
