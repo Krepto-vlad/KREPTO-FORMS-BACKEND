@@ -7,7 +7,7 @@ export const authenticateToken = (
   res: Response,
   next: NextFunction
 ) => {
-  console.error("1111111111111111", req)
+  console.error("1111111111111111", req.headers, '222222222222',req.headers["Authorization"])
   const authHeader = req.headers["Authorization"];
   const token = authHeader && authHeader.split(" ")[1];
 
