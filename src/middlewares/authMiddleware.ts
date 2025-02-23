@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 
@@ -7,10 +6,10 @@ export const authenticateToken = (
   res: Response,
   next: NextFunction
 ) => {
-  console.error("1111111111111111", req.headers, '222222222222',req.headers["Authorization"])
-  const authHeader = req.headers["Authorization"];
+  console.error("1111111111111111", req.headers)
+  const authHeader = req.headers["authorization"];
   const token = authHeader && authHeader.split(" ")[1];
-
+  console.error('222222222222', token)
   if (!token) {
     return res.status(401).json({ message: "Access denied. Token is missing." });
   }
@@ -19,6 +18,7 @@ export const authenticateToken = (
     const secret = process.env.JWT_SECRET as string;
     console.error("token", token, 'sejk', secret)
     const decoded = jwt.verify(token, secret) as { id: number; email: string };
+    console.error('33333333333', decoded)
     req.user = decoded; 
 
     next();
