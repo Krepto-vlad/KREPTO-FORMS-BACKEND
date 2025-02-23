@@ -3,9 +3,10 @@ import pool from "../config/db";
 
 
 export const createForm = async (req: Request, res: Response) => {
+  console.error("1111111111111111111111111", req);
+
   const { title, description, fields } = req.body;
   const userId = Number(req.user?.id);
-  console.log(req);
 
   if (!userId) {
     return res.status(401).json({ message: "Unauthorized" });
