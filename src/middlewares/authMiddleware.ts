@@ -7,6 +7,7 @@ export const authenticateToken = (
   res: Response,
   next: NextFunction
 ) => {
+  console.error("1111111111111111", req)
   const authHeader = req.headers["Authorization"];
   const token = authHeader && authHeader.split(" ")[1];
 
@@ -16,7 +17,7 @@ export const authenticateToken = (
 
   try {
     const secret = process.env.JWT_SECRET as string;
-    console.log("token", token, 'sejk', secret)
+    console.error("token", token, 'sejk', secret)
     const decoded = jwt.verify(token, secret) as { id: number; email: string };
     req.user = decoded; 
 

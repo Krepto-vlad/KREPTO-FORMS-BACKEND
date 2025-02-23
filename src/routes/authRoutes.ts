@@ -92,6 +92,7 @@ router.post(
       const token = jwt.sign({ id: user.id, email: user.email }, SECRET, {
         expiresIn: "1h",
       });
+      console.error("!!!!!!!!!!!!!!!!", jwt.verify(token, secret) as { id: number; email: string } === user);
 
       res.status(200).json({
         user: {
