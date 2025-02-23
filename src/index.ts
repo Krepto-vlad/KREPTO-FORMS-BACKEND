@@ -46,7 +46,7 @@ import dotenv from "dotenv";
 import authRoutes from "./routes/authRoutes";
 import formRoutes from "./routes/formRoutes"; 
 import { createForm } from "./controllers/formController";
-import { authenticateToken } from "./middleware/authMiddleware";
+import { authenticateToken } from "./middlewares/authMiddleware";
 import pool from "./config/db";
 
 dotenv.config();
