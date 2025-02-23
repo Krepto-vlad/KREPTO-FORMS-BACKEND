@@ -45,6 +45,8 @@ import cors from "cors";
 import dotenv from "dotenv";
 import authRoutes from "./routes/authRoutes";
 import formRoutes from "./routes/formRoutes"; 
+import { createForm } from "./controllers/formController";
+import { authenticateToken } from "./middleware/authMiddleware";
 import pool from "./config/db";
 
 dotenv.config();
@@ -137,23 +139,4 @@ app.get("/test-db", async (req, res) => {
   }
 });
 
-app.post("/templates", async (req, res) => {
-  const { title, description, theme, questions } = req.body;
-
-  if (!title || !description || !questions) {
-    return res.status(400).json({ message: "Title, description, and questions are required." });
-  }
-
-  try {
-    const result = await pool.query(
-      `INSERT INTO forms (title, description, theme, questions) 
-       VALUES ($1, $2, $3, $4) RETURNING id, title, description, theme, questions`,
-      [title, description, theme, JSON.stringify(questions)]
-    );
-
-    res.status(201).json({ form: result.rows[0] });
-  } catch (error) {
-    console.error("❌ Ошибка при создании формы:", error);
-    res.status(500).json({ message: "❌ Ошибка при создании формы", error });
-  }
-});
+app.post("/templates", authenticateToken, createForm);

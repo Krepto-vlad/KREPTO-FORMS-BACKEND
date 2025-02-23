@@ -3,30 +3,28 @@ import pool from "../config/db";
 
 
 export const createForm = async (req: Request, res: Response) => {
-  console.error("1111111111111111111111111", req);
-
-  const { title, description, fields } = req.body;
+  const { title, description, theme, questions } = req.body;
   const userId = Number(req.user?.id);
 
   if (!userId) {
     return res.status(401).json({ message: "Unauthorized" });
   }
 
-  if (!title || !fields || !userId) {
-    return res.status(400).json({ message: "Title and fields are required" });
+  if (!title || !description || !questions) {
+    return res.status(400).json({ message: "Title, description, and questions are required." });
   }
 
   try {
     const result = await pool.query(
-      `INSERT INTO forms (title, description, fields, user_id) 
-       VALUES ($1, $2, $3, $4) RETURNING *;`,
-      [title, description, JSON.stringify(fields), userId]
+      `INSERT INTO forms (title, description, theme, questions, user_id) 
+       VALUES ($1, $2, $3, $4, $5) RETURNING id, title, description, theme, questions, user_id`,
+      [title, description, theme, JSON.stringify(questions), userId]
     );
 
-    res.status(201).json(result.rows[0]);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Error creating form" });
+    res.status(201).json({ form: result.rows[0] });
+  } catch (error) {
+    console.error("❌ Ошибка при создании формы:", error);
+    res.status(500).json({ message: "❌ Ошибка при создании формы", error });
   }
 };
 
