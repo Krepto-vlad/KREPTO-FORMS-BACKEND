@@ -1,8 +1,14 @@
 import { Request, Response } from "express";
 import pool from "../config/db";
 
+
 export const createForm = async (req: Request, res: Response) => {
   const { title, description, fields } = req.body;
+  const userId = req.user?.id;
+
+  if (!userId) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
 
   if (!title || !fields) {
     return res.status(400).json({ message: "Title and fields are required" });
@@ -10,9 +16,11 @@ export const createForm = async (req: Request, res: Response) => {
 
   try {
     const result = await pool.query(
-      `INSERT INTO forms (title, description, fields) VALUES ($1, $2, $3) RETURNING *;`,
-      [title, description, fields]
+      `INSERT INTO forms (title, description, fields) 
+       VALUES ($1, $2, $3, $4) RETURNING *;`,
+      [title, description, JSON.stringify(fields), userId]
     );
+
     res.status(201).json(result.rows[0]);
   } catch (err) {
     console.error(err);

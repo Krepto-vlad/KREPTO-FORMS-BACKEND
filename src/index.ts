@@ -87,7 +87,9 @@ const createTables = async () => {
         description TEXT,
         theme VARCHAR,
         questions JSONB NOT NULL,
-        created_at TIMESTAMP DEFAULT NOW()
+        user_id INT NOT NULL,
+        created_at TIMESTAMP DEFAULT NOW(),
+        FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
       );
     `);
     console.log("✅ Таблица users и forms проверена/создана!");
