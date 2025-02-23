@@ -23,4 +23,5 @@ export const authenticateToken = (
     console.error("❌ Ошибка проверки токена:", error);
     return res.status(403).json({ message: "Invalid token." });
   }
+                        console.log("Decoded user:", req.user);
 };
