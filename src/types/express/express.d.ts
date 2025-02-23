@@ -1,14 +1,7 @@
 import { Request as ExpressRequest } from "express";
 declare module "express" { 
     export interface Request {
-        user?: {
-            id: string;
-            name: string;
-            surname: string;
-            email: string;
-            status: string;
-            lastLogin: string;
-          } | jwt.JwtPayload;
+        user?: string | jwt.JwtPayload | User;
     }
   }
 
@@ -18,4 +11,12 @@ declare namespace jwt {
         [key: string]: any;
     }
 }
+export interface User {
+    id: string;
+    name: string;
+    surname: string;
+    email: string;
+    status: string;
+    lastLogin: string; 
+  }
 

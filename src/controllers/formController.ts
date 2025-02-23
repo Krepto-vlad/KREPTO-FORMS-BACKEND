@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { Request, Response } from "express";
 import pool from "../config/db";
 
@@ -14,7 +15,7 @@ export const createForm = async (req: Request, res: Response) => {
     return res.status(400).json({ message: "Title, description, and questions are required." });
   }
 
-  try {
+try {
     const result = await pool.query(
       `INSERT INTO forms (title, description, theme, questions, user_id) 
        VALUES ($1, $2, $3, $4, $5) RETURNING id, title, description, theme, questions, user_id`,

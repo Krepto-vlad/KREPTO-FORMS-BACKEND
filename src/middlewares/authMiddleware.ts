@@ -17,7 +17,7 @@ export const authenticateToken = (
   try {
     const secret = process.env.JWT_SECRET as string;
     console.error("token", token, 'sejk', secret)
-    const decoded = jwt.verify(token, secret) as { id: number; email: string };
+    const decoded = jwt.verify(token, secret);
     console.error('33333333333', decoded)
     req.user = decoded; 
 
