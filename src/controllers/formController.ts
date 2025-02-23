@@ -10,13 +10,13 @@ export const createForm = async (req: Request, res: Response) => {
     return res.status(401).json({ message: "Unauthorized" });
   }
 
-  if (!title || !fields) {
+  if (!title || !fields || !userId) {
     return res.status(400).json({ message: "Title and fields are required" });
   }
 
   try {
     const result = await pool.query(
-      `INSERT INTO forms (title, description, fields) 
+      `INSERT INTO forms (title, description, fields, user_id) 
        VALUES ($1, $2, $3, $4) RETURNING *;`,
       [title, description, JSON.stringify(fields), userId]
     );
