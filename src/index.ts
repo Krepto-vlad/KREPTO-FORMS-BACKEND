@@ -1,44 +1,4 @@
 // @ts-nocheck
-// // import { Pool } from "pg";
-// // import express from "express";
-// // import dotenv from "dotenv";
-
-// // dotenv.config();
-// // const app = express();
-// // const pool = new Pool({ connectionString: process.env.DATABASE_URL });
-
-// // app.get("/test-db", async (req, res) => {
-// //   try {
-// //     const result = await pool.query("SELECT NOW()");
-// //     res.json({ time: result.rows[0] });
-// //   } catch (error) {
-// //     res.status(500).json({ error: "Ошибка подключения к БД" });
-// //   }
-// // });
-
-// // const PORT = process.env.PORT || 5000;
-// // app.listen(PORT, () => console.log(`Сервер запущен на порту ${PORT}`));
-
-// import express from "express";
-// import { Client } from "pg";
-
-// // Создаем клиент для подключения к базе данных
-// const app = express();
-// const port = process.env.PORT || 5000;
-
-// const client = new Client({
-//   connectionString: process.env.DATABASE_URL,
-// });
-
-// client.connect();
-
-// // Эндпоинт для теста подключения к БД
-
-
-// // Запуск сервера
-// app.listen(port, () => {
-//   console.log(`Сервер работает на порту ${port}`);
-// });
 
 import express from "express";
 import cors from "cors";
@@ -94,19 +54,19 @@ const createTables = async () => {
         FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
       );
     `);
-    console.log("✅ Таблица users и forms проверена/создана!");
+    console.log("✅ The users and forms table has been checked/created!");
   } catch (err) {
-    console.error("❌ Ошибка при создании таблицы:", err);
+    console.error("❌ Error creating table:", err);
   }
 };
 
 
 pool.connect()
   .then(async () => {
-    console.log("✅ Подключено к PostgreSQL");
-    await createTables(); // Создать таблицу, если её нет
+    console.log("✅ Connected to PostgreSQL");
+    await createTables(); 
   })
-  .catch((err) => console.error("❌ Ошибка БД:", err));
+  .catch((err) => console.error("❌ DB error:", err));
 
 
 app.listen(PORT, () => {
@@ -118,8 +78,8 @@ app.get("/forms", async (req, res) => {
     const result = await pool.query("SELECT * FROM forms;");
     res.json(result.rows);
   } catch (error) {
-    console.error("❌ Ошибка при получении форм:", error);
-    res.status(500).json({ message: "Ошибка сервера" });
+    console.error("❌ Error while retrieving forms:", error);
+    res.status(500).json({ message: "Server error" });
   }
 });
 
@@ -128,12 +88,12 @@ app.get("/test-db", async (req, res) => {
   try {
     const result = await pool.query("SELECT NOW() as now");
     return res.status(200).json({
-      message: "✅ Подключение к базе успешно!",
+      message: "✅ Connection to the database successfully!",
       serverTime: result.rows[0].now
     });
   } catch (error) {
     return res.status(500).json({ 
-      message: "❌ Ошибка подключения к базе данных", 
+      message: "❌Database connection error", 
       error 
     });
   }

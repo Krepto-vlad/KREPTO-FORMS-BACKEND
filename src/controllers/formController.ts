@@ -24,8 +24,8 @@ try {
 
     res.status(201).json({ form: result.rows[0] });
   } catch (error) {
-    console.error("❌ Ошибка при создании формы:", error);
-    res.status(500).json({ message: "❌ Ошибка при создании формы", error });
+    console.error("❌ Error creating form:", error);
+    res.status(500).json({ message: "❌ Error creating form", error });
   }
 };
 
@@ -50,5 +50,43 @@ export const getFormById = async (req: Request, res: Response) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Error fetching form" });
+  }
+};
+
+export const updateForm = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const { title, description, questions } = req.body;
+  const userId = Number(req.user?.id);
+
+  if (!userId) {
+    return res.status(401).json({ message: "Not authorized" });
+  }
+
+  try {
+  
+    const checkForm = await pool.query(
+      "SELECT user_id FROM forms WHERE id = $1",
+      [id]
+    );
+
+    if (checkForm.rows.length === 0) {
+      return res.status(404).json({ message: "Form not found" });
+    }
+
+    if (checkForm.rows[0].user_id !== userId) {
+      return res.status(403).json({ message: "No rights to edit" });
+    }
+
+    const result = await pool.query(
+      `UPDATE forms 
+       SET title = $1, description = $2, questions = $3
+       WHERE id = $4 RETURNING *`,
+      [title, description, JSON.stringify(questions), id]
+    );
+
+    res.status(200).json(result.rows[0]);
+  } catch (err) {
+    console.error("Form update error:", err);
+    res.status(500).json({ message: "Form update error" });
   }
 };
