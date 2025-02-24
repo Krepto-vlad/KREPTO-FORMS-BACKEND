@@ -80,7 +80,7 @@ export const updateForm = async (req: Request, res: Response) => {
     const result = await pool.query(
       `UPDATE forms 
        SET title = $1, description = $2, questions = $3
-       WHERE id = $4 RETURNING *`,
+       WHERE id = $4 AND user_id = $5 RETURNING *`,
       [title, description, JSON.stringify(questions), id, userId]
     );
 
