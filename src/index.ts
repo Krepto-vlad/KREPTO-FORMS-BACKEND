@@ -27,6 +27,7 @@ app.use(express.json());
 
 app.use("/auth", authRoutes);
 
+app.use("/forms", formRoutes);
 
 const createTables = async () => {
   try {
