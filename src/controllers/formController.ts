@@ -81,7 +81,7 @@ export const updateForm = async (req: Request, res: Response) => {
       `UPDATE forms 
        SET title = $1, description = $2, questions = $3
        WHERE id = $4 RETURNING *`,
-      [title, description, JSON.stringify(questions), id]
+      [title, description, JSON.stringify(questions), id, userId]
     );
 
     res.status(200).json(result.rows[0]);
