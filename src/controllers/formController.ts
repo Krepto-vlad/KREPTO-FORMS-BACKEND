@@ -46,15 +46,7 @@ export const getFormById = async (req: Request, res: Response) => {
     if (result.rows.length === 0) {
       return res.status(404).json({ message: "Form not found" });
     }
-    const form = result.rows[0];
-    const questions = form.questions ? JSON.parse(form.questions) : [];
-    res.json({
-      id: form.id,
-      title: form.title,
-      description: form.description,
-      theme: form.theme,
-      questions: questions,
-    });
+    res.json(result.rows[0]);
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Error fetching form" });
