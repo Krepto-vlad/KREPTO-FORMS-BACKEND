@@ -90,3 +90,34 @@ export const updateForm = async (req: Request, res: Response) => {
     res.status(500).json({ message: "Form update error" });
   }
 };
+
+export const deleteForm = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const userId = Number(req.user?.id);
+
+  if (!userId) {
+    return res.status(401).json({ message: "Not authorized" });
+  }
+
+  try {
+    const checkForm = await pool.query(
+      "SELECT user_id FROM forms WHERE id = $1",
+      [id]
+    );
+
+    if (checkForm.rows.length === 0) {
+      return res.status(404).json({ message: "Form not found" });
+    }
+
+    if (checkForm.rows[0].user_id !== userId) {
+      return res.status(403).json({ message: "No rights to delete" });
+    }
+
+    await pool.query("DELETE FROM forms WHERE id = $1", [id]);
+
+    res.status(200).json({ message: "Form deleted successfully" });
+  } catch (err) {
+    console.error("❌ Form deletion error:", err);
+    res.status(500).json({ message: "Form deletion error" });
+  }
+};
