@@ -1,6 +1,6 @@
 // @ts-nocheck
 import express from "express";
-import { createForm, getForms, getFormById, updateForm, deleteForm } from "../controllers/formController";
+import { createForm, getForms, getFormById, updateForm, deleteForm, submitFormAnswers } from "../controllers/formController";
 import { authenticateToken } from "../middlewares/authMiddleware";
 
 const router = express.Router();
@@ -10,5 +10,6 @@ router.get("/", getForms);
 router.get("/:id", getFormById);
 router.put("/:id", authenticateToken, updateForm);
 router.delete("/:id", authenticateToken, deleteForm);
+router.post("/:id/submit", authenticateToken, submitFormAnswers);
 
 export default router;

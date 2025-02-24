@@ -46,7 +46,15 @@ export const getFormById = async (req: Request, res: Response) => {
     if (result.rows.length === 0) {
       return res.status(404).json({ message: "Form not found" });
     }
-    res.json(result.rows[0]);
+    const form = result.rows[0];
+    const questions = form.questions ? JSON.parse(form.questions) : [];
+    res.json({
+      id: form.id,
+      title: form.title,
+      description: form.description,
+      theme: form.theme,
+      questions: questions,
+    });
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Error fetching form" });
@@ -119,5 +127,26 @@ export const deleteForm = async (req: Request, res: Response) => {
   } catch (err) {
     console.error("❌ Form deletion error:", err);
     res.status(500).json({ message: "Form deletion error" });
+  }
+};
+
+export const submitFormAnswers = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const { answers } = req.body;
+
+  if (!answers || answers.length === 0) {
+    return res.status(400).json({ message: "No answers provided" });
+  }
+
+  try {
+    const result = await pool.query(
+      `INSERT INTO responses (form_id, answers) VALUES ($1, $2) RETURNING *`,
+      [id, JSON.stringify(answers)]
+    );
+
+    res.status(200).json({ message: "Form answers submitted successfully", response: result.rows[0] });
+  } catch (err) {
+    console.error("Error submitting answers:", err);
+    res.status(500).json({ message: "Server error" });
   }
 };
