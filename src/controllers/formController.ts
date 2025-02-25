@@ -122,23 +122,32 @@ export const deleteForm = async (req: Request, res: Response) => {
   }
 };
 
-export const submitFormAnswers = async (req: Request, res: Response) => {
+import { Request, Response } from "express";
+import pool from "../config/db";
+
+export const submitForm = async (req: Request, res: Response) => {
   const { id } = req.params;
   const { answers } = req.body;
+  const userId = req.user ? req.user.id : null; 
 
-  if (!answers || answers.length === 0) {
-    return res.status(400).json({ message: "No answers provided" });
+  if (!answers || !Array.isArray(answers)) {
+    return res.status(400).json({ message: "Invalid answers format." });
   }
 
   try {
-    const result = await pool.query(
-      `INSERT INTO responses (form_id, answers) VALUES ($1, $2) RETURNING *`,
-      [id, JSON.stringify(answers)]
+    const formCheck = await pool.query("SELECT id FROM forms WHERE id = $1", [id]);
+    if (formCheck.rows.length === 0) {
+      return res.status(404).json({ message: "Form not found." });
+    }
+
+    await pool.query(
+      "INSERT INTO responses (form_id, user_id, answers) VALUES ($1, $2, $3)",
+      [id, userId, JSON.stringify(answers)]
     );
 
-    res.status(200).json({ message: "Form answers submitted successfully", response: result.rows[0] });
-  } catch (err) {
-    console.error("Error submitting answers:", err);
-    res.status(500).json({ message: "Server error" });
+    res.status(201).json({ message: "Responses saved successfully!" });
+  } catch (error) {
+    console.error("Error submitting form:", error);
+    res.status(500).json({ message: "Server error." });
   }
 };

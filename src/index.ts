@@ -57,12 +57,15 @@ const createTables = async () => {
     `);
 
     await pool.query(`
-      CREATE TABLE IF NOT EXISTS responses (
-        id SERIAL PRIMARY KEY,
-        form_id INT REFERENCES forms(id) ON DELETE CASCADE,
-        answers JSONB,
-        created_at TIMESTAMP DEFAULT NOW()
-      );
+    CREATE TABLE IF NOT EXISTS responses (
+    id SERIAL PRIMARY KEY,
+    form_id INT NOT NULL,
+    user_id INT,
+    answers JSONB NOT NULL,
+    submitted_at TIMESTAMP DEFAULT NOW(),
+    FOREIGN KEY (form_id) REFERENCES forms(id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL
+  );
     `);
 
     console.log("✅ The users, responses and forms table has been checked/created!");
