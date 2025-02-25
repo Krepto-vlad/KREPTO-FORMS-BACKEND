@@ -41,8 +41,11 @@ export const getForms = async (_req: Request, res: Response) => {
 
 export const getFormById = async (req: Request, res: Response) => {
   const { id } = req.params;
+  console.error('!!!!!!!!!! id', id)
   try {
     const result = await pool.query("SELECT * FROM forms WHERE id = $1;", [id]);
+
+    console.error('=========== res', result)
     if (result.rows.length === 0) {
       return res.status(404).json({ message: "Form not found" });
     }
@@ -121,9 +124,6 @@ export const deleteForm = async (req: Request, res: Response) => {
     res.status(500).json({ message: "Form deletion error" });
   }
 };
-
-import { Request, Response } from "express";
-import pool from "../config/db";
 
 export const submitForm = async (req: Request, res: Response) => {
   const { id } = req.params;
