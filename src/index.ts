@@ -68,19 +68,19 @@ const createTables = async () => {
   );
     `);
 
-    console.log("✅ The users, responses and forms table has been checked/created!");
+    console.log(" The users, responses and forms table has been checked/created!");
   } catch (err) {
-    console.error("❌ Error creating table:", err);
+    console.error(" Error creating table:", err);
   }
 };
 
 
 pool.connect()
   .then(async () => {
-    console.log("✅ Connected to PostgreSQL");
+    console.log(" Connected to PostgreSQL");
     await createTables(); 
   })
-  .catch((err) => console.error("❌ DB error:", err));
+  .catch((err) => console.error(" DB error:", err));
 
 
 app.listen(PORT, () => {
@@ -92,7 +92,7 @@ app.get("/forms", async (req, res) => {
     const result = await pool.query("SELECT * FROM forms;");
     res.json(result.rows);
   } catch (error) {
-    console.error("❌ Error while retrieving forms:", error);
+    console.error(" Error while retrieving forms:", error);
     res.status(500).json({ message: "Server error" });
   }
 });
@@ -102,12 +102,12 @@ app.get("/test-db", async (req, res) => {
   try {
     const result = await pool.query("SELECT NOW() as now");
     return res.status(200).json({
-      message: "✅ Connection to the database successfully!",
+      message: " Connection to the database successfully!",
       serverTime: result.rows[0].now
     });
   } catch (error) {
     return res.status(500).json({ 
-      message: "❌Database connection error", 
+      message: "Database connection error", 
       error 
     });
   }

@@ -24,8 +24,8 @@ try {
 
     res.status(201).json({ form: result.rows[0] });
   } catch (error) {
-    console.error("❌ Error creating form:", error);
-    res.status(500).json({ message: "❌ Error creating form", error });
+    console.error(" Error creating form:", error);
+    res.status(500).json({ message: " Error creating form", error });
   }
 };
 
@@ -120,7 +120,7 @@ export const deleteForm = async (req: Request, res: Response) => {
 
     res.status(200).json({ message: "Form deleted successfully" });
   } catch (err) {
-    console.error("❌ Form deletion error:", err);
+    console.error(" Form deletion error:", err);
     res.status(500).json({ message: "Form deletion error" });
   }
 };
